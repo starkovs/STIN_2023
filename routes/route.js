@@ -7,14 +7,16 @@ const {
   postLogin,
   getAuthentification,
   postAuthentification,
-  getUser
+  getDashboard,
+  postDashboard
 } = require('../controllers/controller');
 
 
-router.get('/', authMiddleware, getUser);
+router.get('/', authMiddleware, getDashboard);
+router.post('/', authMiddleware, postDashboard);
 router.get('/login', getLogin);
 router.post('/login', postLogin);
-router.get('/authentification', getAuthentification);
-router.post('/authentification', postAuthentification);
+router.get('/authentification', authMiddleware, getAuthentification);
+router.post('/authentification', authMiddleware, postAuthentification);
 
 module.exports = router;
