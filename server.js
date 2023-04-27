@@ -24,8 +24,8 @@ mongoose
 app.use(routes);
 
 // start user
-app.listen(8080, (error)=> {
-  console.log(`Listening port 8080`);
+app.listen(process.env.PORT || 8080, (error)=> {
+  console.log(`Listening port `+process.env.PORT || 8080);
 });
 
 // Content-Security-Policy pro bezpecnost
