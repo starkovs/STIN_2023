@@ -11,6 +11,10 @@ const taskSchema = new Schema({
     type: String, 
     required: true
   },
+  username: {
+    type: String, 
+    required: true
+  },
   currency: {
     type: String, 
     required: true

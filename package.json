@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/starkovs/STIN_2023#readme",
   "dependencies": {
+    "alert": "^5.1.4",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
@@ -32,6 +33,7 @@
     "nodemailer": "^6.9.1",
     "nodemon": "^2.0.21",
     "path": "^0.12.7",
+    "popups": "^1.1.3",
     "validator": "^13.9.0"
   }
 }
