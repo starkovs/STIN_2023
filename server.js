@@ -14,7 +14,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
-
 // connect to mongodb
 mongoose
   .connect(mongo_url, { useNewUrlParser: true, useUnifiedTopology: true})
@@ -38,7 +37,6 @@ app.use(csp({
       styleSrc: ["'none'"]
     }
 }));
-
 
 // For test
 // function sum(a, b) {
