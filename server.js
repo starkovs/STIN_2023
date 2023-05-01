@@ -24,7 +24,7 @@ app.use(routes);
 
 // start user
 app.listen(process.env.PORT || 8080, (error)=> {
-  console.log(`Listening port `+process.env.PORT || 8080);
+  // console.log(`Listening port `+process.env.PORT || 8080);
 });
 
 // Content-Security-Policy pro bezpecnost
@@ -38,9 +38,4 @@ app.use(csp({
     }
 }));
 
-// For test
-// function sum(a, b) {
-//   return a + b;
-// }
-
-// exports.sum = sum;
+module.exports = app;

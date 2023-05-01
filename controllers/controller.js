@@ -21,6 +21,7 @@ const generateAccessToken = (id, username) => {
   return jwt.sign(payload, process.env.SECRET, {expiresIn: "1h"});
 }
 
+
 // get login
 const getDashboard = async (req, res) => {
   try {
@@ -30,7 +31,7 @@ const getDashboard = async (req, res) => {
     const payments = await Payment.find({ username: user.id });
     res.render(createPath('dashboard'), { payments,accounts, title });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.render(createPath('error'), { title: 'Error' });
   }
 };
@@ -297,5 +298,8 @@ module.exports = {
   getLogin, 
   postLogin,
   getAuthentification,
-  postAuthentification
+  postAuthentification,
+  generateAccessToken,
+  parseCurrencyRates,
+  parseLine
 }
