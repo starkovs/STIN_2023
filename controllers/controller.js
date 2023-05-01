@@ -171,6 +171,7 @@ const getAuthentification = (req, res) => {
   //   }
   // });
 
+  
   // var mailOptions = {
   //   from: email,
   //   to: 'mikhail.starkov@tul.cz',
