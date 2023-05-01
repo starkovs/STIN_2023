@@ -2,11 +2,15 @@ const createPath = require('../helpers/create-path');
 const User = require('../models/user');
 const Account = require('../models/account');
 const Payment = require('../models/payment');
+const Currency = require('../models/currency');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const validator = require("validator");
 var nodemailer = require('nodemailer'); 
 const { email, password } = require('../config');
+const axios = require('axios');
+const Holidays = require('date-holidays');
+const { isWeekend } = require('date-fns');
 
 // returns generated access token
 const generateAccessToken = (id, username) => {
@@ -32,20 +36,29 @@ const getDashboard = async (req, res) => {
 };
 
 const postDashboard = async (req, res) => {
+  updateCurrencyRates(new Date());
   const {typePayment} = req.body;
   // random number from 1 to 1000
   var total = Math.floor(Math.random() * (1000 - 1 + 1) + 1);
-  var currencies = ['EUR', 'USD', 'GBP', 'CZK'];
+
+  // names of currencies from database table currencies
+  var currencies = await Currency.find({});
+  
+  var currencies_name = currencies.map(function(item) {
+    return item.code;
+  });
+
   // random currency
-  var random_currency = currencies[Math.floor(Math.random() * currencies.length)];
-  console.log(random_currency);
+  var random_currency = currencies_name[Math.floor(Math.random() * currencies_name.length)];
+
+  console.log(total+" "+random_currency);
+
+  // INCOME
   if(typePayment==1){
     // get account number of this client and currency
-    const account_detail = await Account.find({ username: req.userId, currency: 'EUR'});
+    var account_detail = await Account.find({ username: req.userId, currency: random_currency});
 
     var payment = {
-      account: account_detail[0].number, 
-      total: total, 
       username: req.userId,
       type: "income", 
       date: new Date(),
@@ -53,12 +66,20 @@ const postDashboard = async (req, res) => {
 
     // if user has account in this currency - add money to this account
     if (account_detail.length != 0){
-      payment.currencyRate = 1;
+      payment.account = account_detail[0].number;
+      payment.currencyRate = "1";
+      payment.total = total;
+      // payment.account_currency = random_currency;
       payment.currency = random_currency;
     } else{
-      // download actual currency rate
-      
       // convert to CZK and add to CZK account
+      var account_detail = await Account.find({ username: req.userId, currency: "CZK"});
+       // download actual currency rate
+      var currency_rate = await Currency.find({code: random_currency});
+      payment.currencyRate = currency_rate[0].rate/currency_rate[0].quantity;
+      payment.account = account_detail[0].number;
+      // payment.account_currency = account_detail[0].currency;
+      payment.total = (parseFloat(total)*parseFloat(payment.currencyRate)).toFixed(2).toString();
       payment.currency = "CZK";
     }
 
@@ -66,16 +87,44 @@ const postDashboard = async (req, res) => {
     await Payment.create(payment);
     console.log("plus "+total+" "+random_currency);
   } else{
-    // control if account in this currency has enough money
+    // OUTCOME
+    
+    var payment = {
+      username: req.userId,
+      type: "outcome", 
+      date: new Date(),
+    }
 
-    // pokud ano -> odečíst z účtu a přidat do tabulky payments
-
-    // pokud ne -> control if account in CZK currency has enough money
-
-    // pokuad ano -> odečíst z CZK účtu podle aktualniho kurzu a přidat do tabulky payments
-
-    // pokud ne -> Vypis error, ze nedostatek peněz na účtu pro provedeni platby
-    console.log("minus "+total+" "+currency);
+    var account_detail = await Account.find({ username: req.userId, currency: random_currency });
+    const currency = await Currency.findOne({ code: random_currency });
+    // if account exists in this currency
+    if (account_detail.length != 0 && account_detail.balance >= (currency.rate / currency.quantity)){  
+      payment.account = account_detail[0].number;
+      payment.currencyRate = "1";
+      payment.total = (currency.rate / currency.quantity);
+      payment.account_currency = random_currency;
+      payment.currency = random_currency;
+      await Payment.create(payment);
+      // update account.balance
+      // await Account.updateOne({ username: req.userId, currency: random_currency }, { $inc: { balance: -payment.total } });
+    } else{
+      // get CZK account and convert to CZK
+      var account_detail = await Account.find({ username: req.userId, currency: "CZK"});
+      const currency = await Currency.findOne({ code: random_currency });
+      const czkTotal = total * (currency.rate / currency.quantity);
+      if (account_detail.balance < czkTotal) {
+        return res.render(createPath('dashboard'), { title: 'Dashboard', message: 'Not enough money to provide payment on your account' });
+      }
+      payment.currencyRate = currency.rate/currency.quantity;
+      payment.account = account_detail[0].number;
+      payment.account_currency = account_detail[0].currency;
+      payment.total = czkTotal;
+      payment.currency = "CZK";
+      await Payment.create(payment);
+      // update account.balance
+      // await Account.updateOne({ username: req.userId, currency: 'CZK' }, { $inc: { balance: parseFloat(-czkTotal) } });
+      console.log("minus "+total+" "+currency+" (CZK - "+czkTotal+")");
+    }
   }
   res.redirect('/'); 
 }
@@ -147,6 +196,99 @@ const postAuthentification = async (req, res) => {
     return res.render(createPath('authentification'), {title: 'Authentification', message: 'Code is not correct'});
   }
 };
+
+function parseCurrencyRates(data) {
+  const lines = data.split("\n");
+  const dateMatch = lines[0].match(/\d+\.\d+\.\d+/);
+  // const date = dateMatch ? new Date(dateMatch[0]) : null;
+  const date = dateMatch[0]
+  const rates = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+
+    if (!line) {
+      continue;
+    }
+
+    const rate = parseLine(line);
+
+    if (rate) {
+      rates.push(rate);
+    }
+  }
+
+  return {
+    date,
+    rates,
+  };
+}
+
+function parseLine(line) {
+  const [country, currency, quantity, code, rate] = line.split("|");
+
+  if (rate === undefined) {
+    return null;
+  }
+
+  return {
+    quantity: parseInt(quantity),
+    code,
+    rate: parseFloat(rate.replace(',', '.')),
+  };
+}
+
+async function updateCurrencyRates() {
+  const today = new Date();
+  const isWeekendToday = isWeekend(today);
+  const holidays = new Holidays('cz');
+  const isHoliday = holidays.isHoliday(today);
+  const lastRate = await Currency.findOne().sort({ date: -1 }).exec();
+  const [day, month, year] = lastRate.date.split('.');
+  const formatDate = `${year}-${month}-${day}`;  
+
+  if (lastRate && new Date(formatDate).getTime() === today.getTime()) {
+    console.log(`Rates already updated for ${today}`);
+    return;
+  }
+
+  // If today is a weekend or holiday, do not update currency rates
+  if (isWeekendToday || isHoliday) {
+    console.log('Today is a weekend or holiday, currency rates will not be updated');
+    return;
+  }
+
+  const formattedDate = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
+
+  try {
+    const response = await axios.get(`https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt?date=${formattedDate}`);
+    const { date: parsedDate, rates } = parseCurrencyRates(response.data);
+
+    if (rates.length === 0) {
+      console.log(`No currency rates available for ${parsedDate}`);
+      return;
+    }
+
+    const updatedRates = rates.slice(1);
+    // console.log(updatedRates);
+
+    await Currency.deleteMany({}); // delete all existing currencies
+
+    const currencies = updatedRates.map(rate => ({
+      ...rate,
+      date: parsedDate,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }));
+    // console.log(currencies);
+    await Currency.create(currencies); // insert new currencies
+    console.log(`Saved ${currencies.length} currency rates for ${parsedDate}`);
+
+  } catch (err) {
+    console.error(`Error updating currency rates: ${err}`);
+  }
+
+}
 
 // export all functions
 module.exports = {

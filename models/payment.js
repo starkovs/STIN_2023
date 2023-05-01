@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const taskSchema = new Schema({
+const paymentSchema = new Schema({
   account: {
     type: String, 
     required: true
@@ -33,6 +33,6 @@ const taskSchema = new Schema({
   }
 });
 
-const Payment = mongoose.model('Payment', taskSchema);
+const Payment = mongoose.model('Payment', paymentSchema);
 
 module.exports = Payment;
