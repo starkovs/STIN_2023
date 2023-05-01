@@ -63,9 +63,9 @@ FN:228,parseLine
 FN:242,updateCurrencyRates
 FN:278,(anonymous_11)
 FNF:12
-FNH:6
+FNH:5
 FNDA:2,(anonymous_0)
-FNDA:1,(anonymous_1)
+FNDA:0,(anonymous_1)
 FNDA:0,(anonymous_2)
 FNDA:0,(anonymous_3)
 FNDA:2,(anonymous_4)
@@ -93,9 +93,9 @@ DA:16,5
 DA:17,2
 DA:21,2
 DA:26,5
-DA:27,1
-DA:28,1
-DA:29,1
+DA:27,0
+DA:28,0
+DA:29,0
 DA:30,0
 DA:31,0
 DA:32,0
@@ -215,7 +215,7 @@ DA:286,0
 DA:289,0
 DA:295,5
 LF:138
-LH:45
+LH:42
 BRDA:58,0,0,0
 BRDA:58,0,1,0
 BRDA:69,1,0,0
