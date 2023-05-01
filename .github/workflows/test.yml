@@ -5,6 +5,14 @@ on:
     branches: [ '*' ]
   pull_request:
     branches: [ main ]
+    if: ${{ success() }}
+
+env:
+  EMAIL: ${{ secrets.EMAIL }}
+  PASSWORD: ${{ secrets.PASSWORD }}
+  MONGO_URL: ${{ secrets.MONGO_URL }}
+  SECRET: ${{ secrets.SECRET }}
+  PORT: ${{ secrets.PORT }}
 
 jobs:
   test:
@@ -23,3 +31,10 @@ jobs:
 
     - name: Run tests and coverage
       run: npm run test -- --coverage
+      
+    - name: Check code coverage percentage
+      uses: codecov/codecov-action@v1.1.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true
+        flags: unittests
