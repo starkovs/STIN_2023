@@ -31,7 +31,7 @@ jobs:
 
     - name: Run tests and coverage
       run: npm run test -- --coverage
-
+      
     - name: Check code coverage percentage
       uses: codecov/codecov-action@v1.1.0
       with:
