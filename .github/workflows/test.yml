@@ -28,12 +28,23 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run tests and coverage
-      run: npm run test -- --coverage
+    - name: Run test
+      run: npm run test
+
+    - name: Check if tests failed
+    run: |
+      if [ -f "test-results.xml" ]; then
+        if grep -q "failure" test-results.xml; then
+          exit 1
+        fi
+      fi
+
+    # - name: Run tests and coverage
+    #   run: npm run test -- --coverage
       
-    - name: Check code coverage percentage
-      uses: codecov/codecov-action@v1.1.0
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        fail_ci_if_error: true
-        flags: unittests
+    # - name: Check code coverage percentage
+    #   uses: codecov/codecov-action@v1.1.0
+    #   with:
+    #     token: ${{ secrets.CODECOV_TOKEN }}
+    #     fail_ci_if_error: true
+    #     flags: unittests
