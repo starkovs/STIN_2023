@@ -26,7 +26,6 @@ var codeEntry = '';
 
 // get login
 const getDashboard = async (req, res) => {
-  // console.log(req.message);
   try {
     const message = req.message;
     const title = 'Dashboard';
@@ -35,10 +34,11 @@ const getDashboard = async (req, res) => {
     const payments = await Payment.find({ username: user.id });
     res.render(createPath('dashboard'), { payments,accounts, title, message });
   } catch (error) {
-    // console.log(error);
+    console.error(error);
     res.render(createPath('error'), { title: 'Error' });
   }
 };
+
 
 const postDashboard = async (req, res) => {
   updateCurrencyRates(new Date());
@@ -108,12 +108,10 @@ const postDashboard = async (req, res) => {
       type: "outcome", 
       date: new Date(),
     }
-
     var account_detail = await Account.find({ username: req.userId, currency: random_currency });
     const currency = await Currency.findOne({ code: random_currency });
-    // TODO tato podminka nefunguje (kdyz je to EUR tak porad pricita na CZK)
     // if account exists in this currency
-    if (account_detail.length != 0 && account_detail.balance >= total){  
+    if (account_detail.length != 0 && account_detail[0].balance >= total){  
       payment.account = account_detail[0].number;
       payment.currencyRate = "1";
       payment.total = total;
@@ -125,7 +123,6 @@ const postDashboard = async (req, res) => {
     } else{
       // get CZK account and convert to CZK
       var account_detail = await Account.find({ username: req.userId, currency: "CZK"});
-      const currency = await Currency.findOne({ code: random_currency });
       const czkTotal = (total * parseFloat(currency.rate)/parseFloat(currency.quantity));
       if (account_detail.balance < czkTotal) {
         return res.render(createPath('dashboard'), { title: 'Dashboard', message: 'Not enough money to provide payment on your account' });
@@ -246,7 +243,7 @@ function parseCurrencyRates(data) {
 function parseLine(line) {
   const [country, currency, quantity, code, rate] = line.split("|");
 
-  if (rate === undefined) {
+  if (isNaN(parseFloat(rate.replace(',', '.')))) {
     return null;
   }
 
@@ -263,7 +260,6 @@ async function updateCurrencyRates() {
   const holidays = new Holidays('cz');
   const isHoliday = holidays.isHoliday(today);
   const lastRate = await Currency.findOne().sort({ date: -1 }).exec();
-
   // check if lastRate is not null
   if (lastRate !== null) {
     const [day, month, year] = lastRate.date.split('.');
@@ -273,39 +269,28 @@ async function updateCurrencyRates() {
       return;
     } 
   }
-
   // If today is a weekend or holiday, do not update currency rates
   if (isWeekendToday || isHoliday) {
     console.log('Today is a weekend or holiday, currency rates will not be updated');
     return;
   }
-
   const formattedDate = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
 
   try {
     const response = await axios.get(`https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt?date=${formattedDate}`);
     const { date: parsedDate, rates } = parseCurrencyRates(response.data);
-
     if (rates.length === 0) {
       console.log(`No currency rates available for ${formattedDate}`);
       return;
     }
-
-    // console.log('Parsed Date from CNB '+parsedDate);
-    // console.log(lastRate.date);
-    // console.log(parsedDate);
-    // console.log(lastRate.date === parsedDate);
 
     // check if parsedDate is equal to lastRate
     if (lastRate!==null && lastRate.date === parsedDate) {
       console.log(`Rates already updated for ${parsedDate}`);
       return;
     }
-
     const updatedRates = rates.slice(1);
-
     await Currency.deleteMany({}); // delete all existing currencies
-
     const currencies = updatedRates.map(rate => ({
       ...rate,
       date: parsedDate,
@@ -314,11 +299,9 @@ async function updateCurrencyRates() {
     }));
     await Currency.create(currencies); // insert new currencies
     console.log(`Saved ${currencies.length} currency rates for ${parsedDate}`);
-
   } catch (err) {
     console.error(`Error updating currency rates: ${err}`);
   }
-
 }
 
 // export all functions
@@ -331,5 +314,6 @@ module.exports = {
   postAuthentification,
   generateAccessToken,
   parseCurrencyRates,
+  updateCurrencyRates,
   parseLine
 }
