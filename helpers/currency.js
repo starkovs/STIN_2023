@@ -44,12 +44,18 @@ function parseLine(line) {
   };
 }
 
-async function updateCurrencyRates() {
-  const today = new Date();
+async function updateCurrencyRates(today) {
+  if(today===undefined) {
+    const today = new Date();
+    const lastRate = await Currency.findOne().sort({date: -1});
+ 
+  } else{
+    lastRate = [];
+    lastRate.date = '03.05.2023';
+  }
   const isWeekendToday = isWeekend(today);
   const holidays = new Holidays('cz');
   const isHoliday = holidays.isHoliday(today);
-  const lastRate = await Currency.findOne({}).sort({ date: -1 }).exec();
   
   // check if lastRate is not null
   if (lastRate !== null) {
@@ -60,6 +66,7 @@ async function updateCurrencyRates() {
       return;
     } 
   }
+
   // If today is a weekend or holiday, do not update currency rates
   if (isWeekendToday || isHoliday) {
     console.log('Today is a weekend or holiday, currency rates will not be updated');

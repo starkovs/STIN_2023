@@ -107,17 +107,6 @@ describe('postAuthentification', () => {
     expect(res.render).toHaveBeenCalledWith(path.join(process.cwd(), 'views', 'authentification.ejs'), { title: 'Authentification', message: 'Code is not correct' });
     expect(res.redirect).not.toHaveBeenCalled();
   });
-
-  // it('should redirect to "/" if the code is correct', async () => {
-  //   codeEntry = '12345678';
-  //   const req = { body: { code: codeEntry } };
-  //   const res = { redirect: jest.fn(), render: jest.fn() };
-
-  //   await postAuthentification(req, res);
-
-  //   expect(res.redirect).toHaveBeenCalledWith('/');
-  //   expect(res.render).not.toHaveBeenCalled();
-  // });
 });
 
 

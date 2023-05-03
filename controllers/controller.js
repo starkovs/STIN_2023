@@ -33,10 +33,8 @@ const postDashboard = async (req, res) => {
   const {typePayment} = req.body;
   // random number from 1 to 1000
   var total = Math.floor(Math.random() * (1000 - 1 + 1) + 1);
-
   // names of currencies from database table currencies
   var currencies = await Currency.find({});
-
   if(currencies.length==0){
     // redirect get dashboard
     req.message = 'No currencies in database';
@@ -49,6 +47,7 @@ const postDashboard = async (req, res) => {
 
   // random currency
   var random_currency = currencies_name[Math.floor(Math.random() * currencies_name.length)];
+
 
   console.log(total+" "+random_currency);
 
@@ -90,7 +89,7 @@ const postDashboard = async (req, res) => {
     console.log("plus "+total+" "+random_currency);
   } else{
     // OUTCOME
-    
+
     var payment = {
       username: req.userId,
       type: "outcome", 
@@ -112,8 +111,10 @@ const postDashboard = async (req, res) => {
       // get CZK account and convert to CZK
       var account_detail = await Account.find({ username: req.userId, currency: "CZK"});
       const czkTotal = (total * parseFloat(currency.rate)/parseFloat(currency.quantity));
-      if (account_detail.balance < czkTotal) {
-        return res.render(createPath('dashboard'), { title: 'Dashboard', message: 'Not enough money to provide payment on your account' });
+      if (account_detail[0].balance < czkTotal) {
+        const accounts = await Account.find({ username: req.userId });
+        const payments = await Payment.find({ username: req.userId });
+        return res.render(createPath('dashboard'), { payments,accounts,title: 'Dashboard', message: 'Not enough money to provide payment on your account' });
       }
       payment.currencyRate = (parseFloat(currency.rate)/parseFloat(currency.quantity));
       payment.account = account_detail[0].number;

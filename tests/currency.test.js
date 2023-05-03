@@ -49,6 +49,29 @@ describe('parseLine', () => {
 
 });
 
+describe('updateCurrencyRates', () => {
+  test('does not update currency rates on weekends', async () => {
+    const weekendDate = new Date('2023-05-07'); // Sunday
+    const weekendResult = await updateCurrencyRates(weekendDate);
+    expect(weekendResult).toBeUndefined();
+  });
+
+  test('does not update currency rates on holidays', async () => {
+    const weekendDate = new Date('2023-05-01'); //Holiday in Chech Republic
+    const weekendResult = await updateCurrencyRates(weekendDate);
+    expect(weekendResult).toBeUndefined();
+  });
+
+  test('updates currency rates only once per day', async () => {
+    const date = new Date('2023-05-03');
+    const result1 = await updateCurrencyRates(date);
+    const result2 = await updateCurrencyRates(date);
+    expect(result2).toBeUndefined();
+  });
+});
+
+
+
 
 
 
