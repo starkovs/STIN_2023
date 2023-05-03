@@ -1,4 +1,4 @@
-name: Test and Coverage
+name: Node.js Jest Tests and Coverage
 
 on:
   push:
@@ -12,8 +12,6 @@ env:
   MONGO_URL: ${{ secrets.MONGO_URL }}
   SECRET: ${{ secrets.SECRET }}
   PORT: ${{ secrets.PORT }}
-
-name: Node.js Jest Tests and Coverage
 
 jobs:
   test:
@@ -32,6 +30,4 @@ jobs:
       - name: Check coverage
         run: |
           if [ $(echo "$(npx jest --showConfig | grep coverageThreshold | awk '{print $3}' | tr -d ',' | sed 's/"//g') < 50" | bc -l) -eq 1 ]; then
-            echo "Test coverage is less than 50%. Aborting merge."
-            exit 1
-          fi
+            echo "Test coverage is less than 50%. Aborting merge
