@@ -18,7 +18,8 @@ const currencySchema = new Schema({
   },
   date: {
     type: String, 
-    required: true
+    required: true,
+    index: true
   }
 });
 
