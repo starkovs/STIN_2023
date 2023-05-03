@@ -185,6 +185,7 @@ const getAuthentification = (req, res) => {
 
   // codeEntry = Math.floor(100000 + Math.random() * 900000).toString();
   codeEntry = '12345678';
+  
 
   // var mailOptions = {
   //   from: email,
