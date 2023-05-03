@@ -13,38 +13,25 @@ env:
   SECRET: ${{ secrets.SECRET }}
   PORT: ${{ secrets.PORT }}
 
+name: Node.js Jest Tests and Coverage
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Use Node.js 14.x
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14.x'
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Run test
-      run: npm run test
-
-    - name: Check if tests failed
-    run: |
-      if [ -f "test-results.xml" ]; then
-        if grep -q "failure" test-results.xml; then
-          exit 1
-        fi
-      fi
-
-    # - name: Run tests and coverage
-    #   run: npm run test -- --coverage
-      
-    # - name: Check code coverage percentage
-    #   uses: codecov/codecov-action@v1.1.0
-    #   with:
-    #     token: ${{ secrets.CODECOV_TOKEN }}
-    #     fail_ci_if_error: true
-    #     flags: unittests
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
+      - name: Check coverage
+        run: |
+          if [ $(echo "$(npx jest --showConfig | grep coverageThreshold | awk '{print $3}' | tr -d ',' | sed 's/"//g') < 50" | bc -l) -eq 1 ]; then
+            echo "Test coverage is less than 50%. Aborting merge."
+            exit 1
+          fi
