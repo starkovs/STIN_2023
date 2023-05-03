@@ -37,6 +37,7 @@
     "http": "^0.0.1-security",
     "jest": "^29.5.0",
     "jest-mock": "^29.5.0",
+    "jest-mock-req-res": "^1.0.2",
     "jsonwebtoken": "^9.0.0",
     "mocha": "^10.2.0",
     "moment": "^2.29.4",

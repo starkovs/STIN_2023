@@ -3,26 +3,14 @@ const User = require('../models/user');
 const Account = require('../models/account');
 const Payment = require('../models/payment');
 const Currency = require('../models/currency');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const validator = require("validator");
 var nodemailer = require('nodemailer'); 
 const { email, password } = require('../config');
-const axios = require('axios');
-const Holidays = require('date-holidays');
-const { isWeekend } = require('date-fns');
-
-// returns generated access token
-const generateAccessToken = (id, username) => {
-  const payload = {
-    id, 
-    username
-  }
-  return jwt.sign(payload, process.env.SECRET, {expiresIn: "1h"});
-}
+const { updateCurrencyRates } = require('../helpers/currency');
+const { generateAccessToken } = require('../helpers/auth');
 
 var codeEntry = '';
-
 
 // get login
 const getDashboard = async (req, res) => {
@@ -76,7 +64,7 @@ const postDashboard = async (req, res) => {
     }
 
     // if user has account in this currency - add money to this account
-    if (account_detail.length != 0){
+    if (account_detail && account_detail.length != 0){
       payment.account = account_detail[0].number;
       payment.currencyRate = "1";
       payment.total = total;
@@ -87,7 +75,7 @@ const postDashboard = async (req, res) => {
       var account_detail = await Account.find({ username: req.userId, currency: "CZK"});
        // download actual currency rate
       var currency_rate = await Currency.find({code: random_currency});
-      if(currency_rate[0].rate!=null && currency_rate[0].quantity!=null){
+      if(currency_rate && currency_rate[0].rate!=null && currency_rate[0].quantity!=null){
         payment.currencyRate = (parseFloat(currency_rate[0].rate)/parseFloat(currency_rate[0].quantity));
         payment.account = account_detail[0].number;
         // payment.account_currency = account_detail[0].currency;
@@ -174,38 +162,35 @@ const getAuthentification = (req, res) => {
   const title = 'Authentification';
 
   // send email with code
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: email,
+      pass: password
+    }
+  });
 
-  // var transporter = nodemailer.createTransport({
-  //   service: 'gmail',
-  //   auth: {
-  //     user: email,
-  //     pass: password
-  //   }
-  // });
+  codeEntry = Math.floor(100000 + Math.random() * 900000).toString();
+  // codeEntry = '12345678';
 
-  // codeEntry = Math.floor(100000 + Math.random() * 900000).toString();
-  codeEntry = '12345678';
-  
-
-  // var mailOptions = {
-  //   from: email,
-  //   to: 'mikhail.starkov@tul.cz',
-  //   subject: 'Code to login',
-  //   text: codeEntry
-  // };
-  // transporter.sendMail(mailOptions, function(error, info){
-  //   if (error) {
-  //     console.log(error);
-  //   } else {
-  //     console.log('Email sent: ' + info.response);
-  //   }
-  // });
+  var mailOptions = {
+    from: email,
+    to: 'mikhail.starkov@tul.cz',
+    subject: 'Code to login',
+    text: codeEntry
+  };
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
   res.render(createPath('authentification'),{ title });
 };
 
 // post login
 const postAuthentification = async (req, res) => {
-  // TODO: check token and send email with code
   const {code} = req.body;
   if(code === codeEntry){
     return res.redirect('/'); 
@@ -213,97 +198,6 @@ const postAuthentification = async (req, res) => {
     return res.render(createPath('authentification'), {title: 'Authentification', message: 'Code is not correct'});
   }
 };
-
-function parseCurrencyRates(data) {
-  const lines = data.split("\n");
-  const dateMatch = lines[0].match(/\d+\.\d+\.\d+/);
-  // const date = dateMatch ? new Date(dateMatch[0]) : null;
-  const date = dateMatch[0]
-  const rates = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim();
-
-    if (!line) {
-      continue;
-    }
-
-    const rate = parseLine(line);
-
-    if (rate) {
-      rates.push(rate);
-    }
-  }
-
-  return {
-    date,
-    rates,
-  };
-}
-
-function parseLine(line) {
-  const [country, currency, quantity, code, rate] = line.split("|");
-
-  if (isNaN(parseFloat(rate.replace(',', '.')))) {
-    return null;
-  }
-
-  return {
-    quantity: parseInt(quantity),
-    code,
-    rate: parseFloat(rate.replace(',', '.')),
-  };
-}
-
-async function updateCurrencyRates() {
-  const today = new Date();
-  const isWeekendToday = isWeekend(today);
-  const holidays = new Holidays('cz');
-  const isHoliday = holidays.isHoliday(today);
-  const lastRate = await Currency.findOne().sort({ date: -1 }).exec();
-  // check if lastRate is not null
-  if (lastRate !== null) {
-    const [day, month, year] = lastRate.date.split('.');
-    const formatDate = `${year}-${month}-${day}`; 
-    if (lastRate.date!==null && new Date(formatDate).getTime() === today.getTime()) {
-      console.log(`Rates already updated for ${today}`);
-      return;
-    } 
-  }
-  // If today is a weekend or holiday, do not update currency rates
-  if (isWeekendToday || isHoliday) {
-    console.log('Today is a weekend or holiday, currency rates will not be updated');
-    return;
-  }
-  const formattedDate = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
-
-  try {
-    const response = await axios.get(`https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt?date=${formattedDate}`);
-    const { date: parsedDate, rates } = parseCurrencyRates(response.data);
-    if (rates.length === 0) {
-      console.log(`No currency rates available for ${formattedDate}`);
-      return;
-    }
-
-    // check if parsedDate is equal to lastRate
-    if (lastRate!==null && lastRate.date === parsedDate) {
-      console.log(`Rates already updated for ${parsedDate}`);
-      return;
-    }
-    const updatedRates = rates.slice(1);
-    await Currency.deleteMany({}); // delete all existing currencies
-    const currencies = updatedRates.map(rate => ({
-      ...rate,
-      date: parsedDate,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }));
-    await Currency.create(currencies); // insert new currencies
-    console.log(`Saved ${currencies.length} currency rates for ${parsedDate}`);
-  } catch (err) {
-    console.error(`Error updating currency rates: ${err}`);
-  }
-}
 
 // export all functions
 module.exports = {
@@ -313,8 +207,5 @@ module.exports = {
   postLogin,
   getAuthentification,
   postAuthentification,
-  generateAccessToken,
-  parseCurrencyRates,
-  updateCurrencyRates,
-  parseLine
+  codeEntry
 }

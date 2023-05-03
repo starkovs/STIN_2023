@@ -1,4 +1,9 @@
-const { parseCurrencyRates, parseLine } = require('../controllers/controller');
+const { parseCurrencyRates, parseLine } = require('../helpers/currency');
+const axios = require('axios');
+const Holidays = require('date-holidays');
+const { isWeekend } = require('date-fns');
+const Currency = require('../models/currency');
+const { updateCurrencyRates } = require('../helpers/currency');
 
 describe('parseCurrencyRates', () => {
 it('should return the correct date and rates', () => {
