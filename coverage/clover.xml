@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1683101172232" clover="3.2.0">
-  <project timestamp="1683101172232" name="All files">
-    <metrics statements="219" coveredstatements="115" conditionals="46" coveredconditionals="8" methods="18" coveredmethods="10" elements="283" coveredelements="133" complexity="0" loc="219" ncloc="219" packages="6" files="10" classes="10"/>
+<coverage generated="1683101766140" clover="3.2.0">
+  <project timestamp="1683101766141" name="All files">
+    <metrics statements="187" coveredstatements="59" conditionals="44" coveredconditionals="2" methods="15" coveredmethods="3" elements="246" coveredelements="64" complexity="0" loc="187" ncloc="187" packages="5" files="8" classes="8"/>
     <package name="STIN_2023">
-      <metrics statements="24" coveredstatements="22" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="1"/>
+      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="config.js" path="/Users/starkov/STIN_2023/config.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="8" type="stmt"/>
-        <line num="2" count="8" type="stmt"/>
-        <line num="4" count="8" type="stmt"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
       </file>
-      <file name="server.js" path="/Users/starkov/STIN_2023/server.js">
-        <metrics statements="21" coveredstatements="19" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="1"/>
+    </package>
+    <package name="STIN_2023.controllers">
+      <metrics statements="152" coveredstatements="24" conditionals="42" coveredconditionals="0" methods="12" coveredmethods="1"/>
+      <file name="controller.js" path="/Users/starkov/STIN_2023/controllers/controller.js">
+        <metrics statements="152" coveredstatements="24" conditionals="42" coveredconditionals="0" methods="12" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -23,40 +26,13 @@
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
         <line num="13" count="1" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
-        <line num="26" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="31" count="1" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
-      </file>
-    </package>
-    <package name="STIN_2023.controllers">
-      <metrics statements="152" coveredstatements="50" conditionals="42" coveredconditionals="5" methods="12" coveredmethods="6"/>
-      <file name="controller.js" path="/Users/starkov/STIN_2023/controllers/controller.js">
-        <metrics statements="152" coveredstatements="50" conditionals="42" coveredconditionals="5" methods="12" coveredmethods="6"/>
-        <line num="1" count="8" type="stmt"/>
-        <line num="2" count="8" type="stmt"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="4" count="8" type="stmt"/>
-        <line num="5" count="8" type="stmt"/>
-        <line num="6" count="8" type="stmt"/>
-        <line num="7" count="8" type="stmt"/>
-        <line num="8" count="8" type="stmt"/>
-        <line num="9" count="8" type="stmt"/>
-        <line num="10" count="8" type="stmt"/>
-        <line num="11" count="8" type="stmt"/>
-        <line num="12" count="8" type="stmt"/>
-        <line num="13" count="8" type="stmt"/>
-        <line num="16" count="8" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
         <line num="17" count="2" type="stmt"/>
         <line num="21" count="2" type="stmt"/>
-        <line num="24" count="8" type="stmt"/>
-        <line num="28" count="8" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
@@ -66,7 +42,7 @@
         <line num="35" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
-        <line num="43" count="8" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
@@ -120,11 +96,11 @@
         <line num="137" count="0" type="stmt"/>
         <line num="138" count="0" type="stmt"/>
         <line num="141" count="0" type="stmt"/>
-        <line num="146" count="8" type="stmt"/>
-        <line num="147" count="2" type="stmt"/>
-        <line num="148" count="2" type="stmt"/>
-        <line num="149" count="2" type="stmt"/>
-        <line num="153" count="8" type="stmt"/>
+        <line num="146" count="1" type="stmt"/>
+        <line num="147" count="0" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="149" count="0" type="stmt"/>
+        <line num="153" count="1" type="stmt"/>
         <line num="154" count="0" type="stmt"/>
         <line num="155" count="0" type="stmt"/>
         <line num="156" count="0" type="stmt"/>
@@ -135,36 +111,36 @@
         <line num="162" count="0" type="stmt"/>
         <line num="166" count="0" type="stmt"/>
         <line num="168" count="0" type="stmt"/>
-        <line num="173" count="8" type="stmt"/>
-        <line num="174" count="1" type="stmt"/>
-        <line num="187" count="1" type="stmt"/>
-        <line num="202" count="1" type="stmt"/>
-        <line num="206" count="8" type="stmt"/>
+        <line num="173" count="1" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
+        <line num="187" count="0" type="stmt"/>
+        <line num="202" count="0" type="stmt"/>
+        <line num="206" count="1" type="stmt"/>
         <line num="208" count="0" type="stmt"/>
         <line num="209" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="210" count="0" type="stmt"/>
         <line num="212" count="0" type="stmt"/>
-        <line num="217" count="1" type="stmt"/>
-        <line num="218" count="1" type="stmt"/>
-        <line num="220" count="1" type="stmt"/>
-        <line num="221" count="1" type="stmt"/>
-        <line num="223" count="1" type="stmt"/>
-        <line num="224" count="4" type="stmt"/>
-        <line num="226" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="217" count="0" type="stmt"/>
+        <line num="218" count="0" type="stmt"/>
+        <line num="220" count="0" type="stmt"/>
+        <line num="221" count="0" type="stmt"/>
+        <line num="223" count="0" type="stmt"/>
+        <line num="224" count="0" type="stmt"/>
+        <line num="226" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="227" count="0" type="stmt"/>
-        <line num="230" count="4" type="stmt"/>
-        <line num="232" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="233" count="3" type="stmt"/>
-        <line num="237" count="1" type="stmt"/>
-        <line num="244" count="6" type="stmt"/>
-        <line num="246" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="247" count="2" type="stmt"/>
-        <line num="250" count="4" type="stmt"/>
-        <line num="258" count="1" type="stmt"/>
-        <line num="259" count="1" type="stmt"/>
-        <line num="260" count="1" type="stmt"/>
-        <line num="261" count="1" type="stmt"/>
-        <line num="262" count="1" type="stmt"/>
+        <line num="230" count="0" type="stmt"/>
+        <line num="232" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="233" count="0" type="stmt"/>
+        <line num="237" count="0" type="stmt"/>
+        <line num="244" count="0" type="stmt"/>
+        <line num="246" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="247" count="0" type="stmt"/>
+        <line num="250" count="0" type="stmt"/>
+        <line num="258" count="0" type="stmt"/>
+        <line num="259" count="0" type="stmt"/>
+        <line num="260" count="0" type="stmt"/>
+        <line num="261" count="0" type="stmt"/>
+        <line num="262" count="0" type="stmt"/>
         <line num="264" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="265" count="0" type="stmt"/>
         <line num="266" count="0" type="stmt"/>
@@ -190,24 +166,24 @@
         <line num="300" count="0" type="stmt"/>
         <line num="301" count="0" type="stmt"/>
         <line num="303" count="0" type="stmt"/>
-        <line num="308" count="8" type="stmt"/>
+        <line num="308" count="1" type="stmt"/>
       </file>
     </package>
     <package name="STIN_2023.helpers">
-      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="create-path.js" path="/Users/starkov/STIN_2023/helpers/create-path.js">
-        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="1" count="8" type="stmt"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="5" count="8" type="stmt"/>
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
       </file>
     </package>
     <package name="STIN_2023.middleware">
       <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
       <file name="authMiddleware.js" path="/Users/starkov/STIN_2023/middleware/authMiddleware.js">
         <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
-        <line num="1" count="2" type="stmt"/>
-        <line num="10" count="2" type="stmt"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
         <line num="11" count="2" type="stmt"/>
         <line num="12" count="2" type="stmt"/>
         <line num="13" count="2" type="cond" truecount="2" falsecount="0"/>
@@ -221,52 +197,35 @@
       <metrics statements="20" coveredstatements="20" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="account.js" path="/Users/starkov/STIN_2023/models/account.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="8" type="stmt"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="5" count="8" type="stmt"/>
-        <line num="25" count="8" type="stmt"/>
-        <line num="27" count="8" type="stmt"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
       </file>
       <file name="currency.js" path="/Users/starkov/STIN_2023/models/currency.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="8" type="stmt"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="5" count="8" type="stmt"/>
-        <line num="25" count="8" type="stmt"/>
-        <line num="27" count="8" type="stmt"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
       </file>
       <file name="payment.js" path="/Users/starkov/STIN_2023/models/payment.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="8" type="stmt"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="5" count="8" type="stmt"/>
-        <line num="36" count="8" type="stmt"/>
-        <line num="38" count="8" type="stmt"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
       </file>
       <file name="user.js" path="/Users/starkov/STIN_2023/models/user.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="8" type="stmt"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="5" count="8" type="stmt"/>
-        <line num="17" count="8" type="stmt"/>
-        <line num="19" count="8" type="stmt"/>
-      </file>
-    </package>
-    <package name="STIN_2023.routes">
-      <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="route.js" path="/Users/starkov/STIN_2023/routes/route.js">
-        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
-        <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
         <line num="19" count="1" type="stmt"/>
-        <line num="20" count="1" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
       </file>
     </package>
   </project>
