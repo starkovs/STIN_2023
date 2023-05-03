@@ -27,16 +27,15 @@ jobs:
         run: npm install
       - name: Run tests
         run: npm test
-      - name: Check coverage
-        run: |
-          if [ $(echo "$(npx jest --showConfig \
-            | grep coverageThreshold \
-            | awk '{print $3}' \
-            | tr -d ',' \
-            | sed 's/\"//g') < 50" \
-            | bc -l) -eq 1 ]; then
-            echo "Test coverage is less than 50%. Aborting merge."
-            exit 1
-          fi
+      - name: Check test coverage
+        run: npm run coverage
+        # run: |
+        #   coverage=$(npx jest --showConfig | grep coverageThreshold | awk '{print $3}' | tr -d ',' | sed 's/"//g')
+        #   threshold=50
+        #   if (( $(echo "$coverage" | tr -d % | sed 's/\..*$//g' ) < $threshold )); then
+        #     echo "Test coverage is less than $threshold%. Aborting merge."
+        #     exit 1
+        #   fi
+        # shell: /usr/bin/bash -e {0}
 
 
