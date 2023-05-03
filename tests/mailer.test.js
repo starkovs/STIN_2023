@@ -2,6 +2,9 @@ const nodemailer = require('nodemailer');
 const { getAuthentification } = require('../controllers/controller');
 // const { email, password } = require('../config');
 
+const path = require('path');
+
+
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -35,7 +38,7 @@ describe('getAuthentification', () => {
       render: jest.fn()
     };
     getAuthentification(req, res);
-    expect(res.render).toHaveBeenCalledWith('/Users/starkov/STIN_2023/views/authentification.ejs', {
+    expect(res.render).toHaveBeenCalledWith(path.join(process.cwd(), 'views', 'authentification.ejs'), {
       title: 'Authentification'
     });
   });
