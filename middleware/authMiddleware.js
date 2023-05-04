@@ -11,6 +11,7 @@ module.exports = function (req, res, next) {
     const token = req.cookies.token;
     jwt.verify(req.cookies.token, process.env.SECRET , function(err, decodedToken) {
         if(err) { 
+            // req.session.auth = "NE";
             res.clearCookie('token');
             res.redirect('/login');  
         }

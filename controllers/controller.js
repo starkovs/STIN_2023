@@ -14,6 +14,9 @@ var codeEntry = '';
 
 // get login
 const getDashboard = async (req, res) => {
+  // if (req.session.auth!=='ANO') {
+  //   return res.redirect('/login');
+  // }
   try {
     const message = req.message;
     const title = 'Dashboard';
@@ -154,6 +157,7 @@ const postLogin = async (req, res) => {
       httpOnly: true,
     });
     // redirect to second authorization by email
+    req.session.auth = "NO";
     return res.redirect('/authentification');   
   } catch(ex){
     return res.render(createPath('login'), {title: 'Login', message: 'Login or password is not correct'});
@@ -196,6 +200,7 @@ const getAuthentification = (req, res) => {
 const postAuthentification = async (req, res) => {
   const {code} = req.body;
   if(code === codeEntry){
+    req.session.auth = "ANO";
     return res.redirect('/'); 
   } else {
     return res.render(createPath('authentification'), {title: 'Authentification', message: 'Code is not correct'});

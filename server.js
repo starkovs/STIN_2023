@@ -9,10 +9,18 @@ const csp = require('helmet-csp');
 const helmet = require("helmet-csp");
 const routes = require("./routes/route.js");
 const { mongo_url } = require('./config');
+const session = require('express-session');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
+
+// Configure session middleware
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: true,
+}));
 
 // connect to mongodb
 mongoose
