@@ -111,11 +111,13 @@ const postDashboard = async (req, res) => {
       // get CZK account and convert to CZK
       var account_detail = await Account.find({ username: req.userId, currency: "CZK"});
       const czkTotal = (total * parseFloat(currency.rate)/parseFloat(currency.quantity));
-      if (account_detail[0].balance < czkTotal) {
+      console.log(czkTotal);
+      console.log(account_detail);
+      if (account_detail && account_detail[0].balance < czkTotal) {
         const accounts = await Account.find({ username: req.userId });
         const payments = await Payment.find({ username: req.userId });
         return res.render(createPath('dashboard'), { payments,accounts,title: 'Dashboard', message: 'Not enough money to provide payment on your account' });
-      }
+      } else
       payment.currencyRate = (parseFloat(currency.rate)/parseFloat(currency.quantity));
       payment.account = account_detail[0].number;
       payment.account_currency = account_detail[0].currency;
