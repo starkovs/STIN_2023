@@ -77,6 +77,8 @@ async function updateCurrencyRates(today) {
   try {
     const response = await axios.get(`https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/denni_kurz.txt?date=${formattedDate}`);
     const { date: parsedDate, rates } = parseCurrencyRates(response.data);
+
+
     if (rates.length === 0) {
       console.log(`No currency rates available for ${formattedDate}`);
       return;
@@ -88,6 +90,7 @@ async function updateCurrencyRates(today) {
       return;
     }
     const updatedRates = rates.slice(1);
+
     await Currency.deleteMany({}); // delete all existing currencies
     const currencies = updatedRates.map(rate => ({
       ...rate,

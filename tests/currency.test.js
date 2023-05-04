@@ -4,24 +4,28 @@ const Holidays = require('date-holidays');
 const { isWeekend } = require('date-fns');
 const Currency = require('../models/currency');
 const { updateCurrencyRates } = require('../helpers/currency');
+const Account = require('../models/account');
+const Payment = require('../models/payment');
+
+jest.mock('axios');
 
 describe('parseCurrencyRates', () => {
-it('should return the correct date and rates', () => {
-  const data = `28.04.2023 #83
-  země|měna|množství|kód|kurz
-  Austrálie|dolar|1|AUD|14,099
-  Brazílie|real|1|BRL|4,278
-  Bulharsko|lev|1|BGN|12,019`;
+  it('should return the correct date and rates', () => {
+    const data = `28.04.2023 #83
+    země|měna|množství|kód|kurz
+    Austrálie|dolar|1|AUD|14,099
+    Brazílie|real|1|BRL|4,278
+    Bulharsko|lev|1|BGN|12,019`;
 
-  const result = parseCurrencyRates(data);
+    const result = parseCurrencyRates(data);
 
-  expect(result.date).toBe('28.04.2023');
-  expect(result.rates).toEqual([
-    { code: 'AUD', quantity: 1, rate: 14.099 },
-    { code: 'BRL', quantity: 1, rate: 4.278 },
-    { code: 'BGN', quantity: 1, rate: 12.019 },
-  ]);
-});
+    expect(result.date).toBe('28.04.2023');
+    expect(result.rates).toEqual([
+      { code: 'AUD', quantity: 1, rate: 14.099 },
+      { code: 'BRL', quantity: 1, rate: 4.278 },
+      { code: 'BGN', quantity: 1, rate: 12.019 },
+    ]);
+  });
 });
 
 
