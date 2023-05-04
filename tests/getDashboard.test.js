@@ -18,7 +18,7 @@ describe('getDashboard', () => {
   });
 
   test('should render dashboard template with user accounts and payments', async () => {
-    const req = { userId: '6421c16ae493fe55be70790b', message: 'Welcome to your dashboard!' };
+    var req = { userId: '6421c16ae493fe55be70790b', message: 'Welcome to your dashboard!'};
     const res = {
       render: jest.fn(),
     };
